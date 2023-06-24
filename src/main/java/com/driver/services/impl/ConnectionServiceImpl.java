@@ -118,25 +118,52 @@ public class ConnectionServiceImpl implements ConnectionService {
         if(receiver == null){
             throw new Exception("Receiver not present");
         }
-        CountryName senderCountry = sender.getOriginalCountry().getCountryName();
-//        if(sender.getConnected()){
-//            senderCountry = CountryTransformer.getCountryByCode(sender.getMaskedIp().substring(0,3));
-//        }
-        CountryName receiverCountry = receiver.getOriginalCountry().getCountryName();
-        if(sender.getConnected()){
-            receiverCountry = CountryTransformer.getCountryByCode(receiver.getMaskedIp().substring(0,3));
-        }
-        if(senderCountry.equals(receiverCountry)){
-            return sender;
-        }
-        try{
-            sender.setConnected(false);
-            sender.setMaskedIp(null);
-            connect(senderId,senderCountry.toString());
-            return sender;
 
-        }catch (Exception e){
+        CountryName countryNameofReceiver;
+        if(receiver.getConnected()==true){
+            countryNameofReceiver = CountryTransformer.getCountryByCode(receiver.getMaskedIp().substring(0,3));
+        }
+        else {
+            countryNameofReceiver = receiver.getOriginalCountry().getCountryName();
+        }
+
+        CountryName countryNameOfSender = sender.getOriginalCountry().getCountryName();
+
+        if(countryNameofReceiver.equals(countryNameOfSender)){
+            return sender;
+        }
+
+        List<ServiceProvider> serviceProviders = sender.getServiceProviderList();
+        boolean flag = false;
+        int serviceProviderId = Integer.MAX_VALUE;
+        ServiceProvider serviceProviderToConnect = null;
+        for(ServiceProvider serviceProvider : serviceProviders){
+            for(Country country : serviceProvider.getCountryList()){
+                if(country.getCountryName().equals(countryNameofReceiver)){
+                    flag = true;
+                    if(serviceProviderId > serviceProvider.getId()){
+                        serviceProviderId = serviceProvider.getId();
+                        serviceProviderToConnect = serviceProvider;
+                    }
+                }
+            }
+        }
+        if(flag == false){
             throw new Exception("Cannot establish communication");
         }
+
+        Connection connection = new Connection();
+        connection.setServiceProvider(serviceProviderToConnect);
+        connection.setUser(sender);
+        Connection savedConnection = connectionRepository2.save(connection);
+
+        serviceProviderToConnect.getConnectionList().add(savedConnection);
+        sender.getConnectionList().add(savedConnection);
+        sender.setConnected(true);
+        sender.setMaskedIp("" + countryNameofReceiver.toCode() + "." + serviceProviderId + "." + sender.getId() );
+        ServiceProvider savedServiceProvider = serviceProviderRepository2.save(serviceProviderToConnect);
+        User saveduser = userRepository2.save(sender);
+        return saveduser;
+
     }
 }
