@@ -45,9 +45,8 @@ public class CountryTransformer {
         if(code=="004"){
             return CountryName.CHI;
         }
-        if(code=="005"){
+        else{
             return CountryName.JPN;
         }
-        return null;
     }
 }
