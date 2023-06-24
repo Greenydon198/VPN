@@ -53,7 +53,7 @@ public class ConnectionServiceImpl implements ConnectionService {
                 }
             }
         }
-        if(serviceId==Integer.MAX_VALUE)
+        if(curr==null)
             throw new Exception("Unable to connect");
         Connection connection = new Connection();
         connection.setUser(user);
