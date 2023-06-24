@@ -33,16 +33,16 @@ public class CountryTransformer {
     }
 
     public static CountryName getCountryByCode(String code) {
-        if(code=="001"){
+        if(code.equals("001")){
             return CountryName.IND;
         }
-        if(code=="002"){
+        if(code.equals("002")){
             return CountryName.USA;
         }
-        if(code=="003"){
+        if(code.equals("003")){
             return CountryName.AUS;
         }
-        if(code=="004"){
+        if(code.equals("004")){
             return CountryName.CHI;
         }
         else{
