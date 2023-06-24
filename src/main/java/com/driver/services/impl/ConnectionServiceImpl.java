@@ -31,7 +31,7 @@ public class ConnectionServiceImpl implements ConnectionService {
         //Else, establish the connection where the maskedIp is "updatedCountryCode.serviceProviderId.userId" and return the updated user.
         // If multiple service providers allow you to connect to the country, use the service provider having smallest id.
         User user = userRepository2.findById(userId).get();
-        CountryName userCountry = user.getOriginalcountry().getCountryName();
+        CountryName userCountry = user.getOriginalCountry().getCountryName();
         if(user.getConnected())
             throw new Exception("Already connected");
         Country country = CountryTransformer.convertnameToEntity(countryName1);
@@ -86,11 +86,11 @@ public class ConnectionServiceImpl implements ConnectionService {
         //If communication can not be established due to any reason, throw "Cannot establish communication" exception
         User sender = userRepository2.findById(senderId).get();
         User receiver = userRepository2.findById(receiverId).get();
-        CountryName senderCountry = sender.getOriginalcountry().getCountryName();
+        CountryName senderCountry = sender.getOriginalCountry().getCountryName();
 //        if(sender.getConnected()){
 //            senderCountry = CountryTransformer.getCountryByCode(sender.getMaskedIp().substring(0,3));
 //        }
-        CountryName receiverCountry = receiver.getOriginalcountry().getCountryName();
+        CountryName receiverCountry = receiver.getOriginalCountry().getCountryName();
         if(sender.getConnected()){
             receiverCountry = CountryTransformer.getCountryByCode(receiver.getMaskedIp().substring(0,3));
         }
