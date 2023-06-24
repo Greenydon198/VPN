@@ -11,8 +11,6 @@ import com.driver.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.security.Provider;
-
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -31,7 +29,7 @@ public class UserServiceImpl implements UserService {
         user.setUsername(username);
         user.setPassword(password);
         user.setConnected(false);
-        user.setCountry(country);
+        user.setOriginalcountry(country);
         user = userRepository3.save(user);
         user.setOriginalIp(country.getCode()+"."+user.getId());
         country.setUser(user);
