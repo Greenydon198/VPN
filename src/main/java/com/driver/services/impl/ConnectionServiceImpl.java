@@ -46,7 +46,7 @@ public class ConnectionServiceImpl implements ConnectionService {
             for(Country country1: serviceProvider.getCountryList()){
                 if(countryName.equals(country1.getCountryName())){
                     serviceId = Math.min(serviceId,serviceProvider.getId());
-                    continue;
+                    break;
                 }
             }
         }
