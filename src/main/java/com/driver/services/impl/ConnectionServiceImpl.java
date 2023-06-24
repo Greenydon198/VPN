@@ -31,7 +31,7 @@ public class ConnectionServiceImpl implements ConnectionService {
         //Else, establish the connection where the maskedIp is "updatedCountryCode.serviceProviderId.userId" and return the updated user.
         // If multiple service providers allow you to connect to the country, use the service provider having smallest id.
         User user = userRepository2.findById(userId).get();
-        if(user == null){
+        if(user == null || user.getOriginalCountry()==null){
             throw new Exception("no user present");
         }
         CountryName userCountry = user.getOriginalCountry().getCountryName();
