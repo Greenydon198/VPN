@@ -42,17 +42,19 @@ public class ConnectionServiceImpl implements ConnectionService {
         if(userCountry.equals(countryName))
             return user;
         int serviceId = Integer.MAX_VALUE;
+        ServiceProvider curr = null;
         for(ServiceProvider serviceProvider: user.getServiceProviderList()){
             for(Country country1: serviceProvider.getCountryList()){
                 if(countryName.equals(country1.getCountryName())){
-                    serviceId = Math.min(serviceId,serviceProvider.getId());
-                    break;
+                    if(serviceId<serviceProvider.getId()) {
+                        serviceId = serviceProvider.getId();
+                        curr = serviceProvider;
+                    }
                 }
             }
         }
         if(serviceId==Integer.MAX_VALUE)
             throw new Exception("Unable to connect");
-        ServiceProvider curr = serviceProviderRepository2.findById(serviceId).get();
         Connection connection = new Connection();
         connection.setUser(user);
         connection.setServiceProvider(curr);
