@@ -9,6 +9,8 @@ import com.driver.services.Transformer.CountryTransformer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class ConnectionServiceImpl implements ConnectionService {
     @Autowired
@@ -19,7 +21,7 @@ public class ConnectionServiceImpl implements ConnectionService {
     ConnectionRepository connectionRepository2;
 
     @Override
-    public User connect(int userId, String countryName1) throws Exception{
+    public User connect(int userId, String countryName) throws Exception{
         //Connect the user to a vpn by considering the following priority order.
         //1. If the user is already connected to any service provider, throw "Already connected" exception.
         //2. Else if the countryName corresponds to the original country of the user, do nothing.
